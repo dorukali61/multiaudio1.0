@@ -1,0 +1,16 @@
+name: build-exe
+on: [workflow_dispatch, push]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyaudiowpatch numpy pyinstaller
+      - run: pyinstaller --noconsole --onefile --name MultiAudio --collect-all pyaudiowpatch app.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MultiAudio-windows
+          path: dist/MultiAudio.exe
